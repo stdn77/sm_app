@@ -1,0 +1,244 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Розділ: Загальні налаштування -->
+        <TextView
+            android:id="@+id/text_general_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Загальні налаштування"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Налаштування сповіщень -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_general_settings">
+
+            <TextView
+                android:id="@+id/text_notifications"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Сповіщення"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/text_notifications_description"
+                app:layout_constraintEnd_toStartOf="@+id/switch_notifications"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_notifications_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Отримувати сповіщення про нові повідомлення"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/switch_notifications"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_notifications" />
+
+            <Switch
+                android:id="@+id/switch_notifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Налаштування теми -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_notifications">
+
+            <TextView
+                android:id="@+id/text_theme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Темна тема"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/text_theme_description"
+                app:layout_constraintEnd_toStartOf="@+id/switch_dark_theme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_theme_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Використовувати темну тему"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/switch_dark_theme"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_theme" />
+
+            <Switch
+                android:id="@+id/switch_dark_theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Розділ: Сховище -->
+        <TextView
+            android:id="@+id/text_storage_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Сховище"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_theme" />
+
+        <!-- Використання сховища -->
+        <TextView
+            android:id="@+id/text_storage_usage_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Використання сховища:"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_storage_heading" />
+
+        <TextView
+            android:id="@+id/text_storage_usage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_storage_usage_label"
+            app:layout_constraintStart_toEndOf="@+id/text_storage_usage_label"
+            app:layout_constraintTop_toTopOf="@+id/text_storage_usage_label"
+            tools:text="125 MB" />
+
+        <!-- Розмір кешу -->
+        <TextView
+            android:id="@+id/text_cache_size_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Розмір кешу:"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_storage_usage_label" />
+
+        <TextView
+            android:id="@+id/text_cache_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_cache_size_label"
+            app:layout_constraintStart_toEndOf="@+id/text_cache_size_label"
+            app:layout_constraintTop_toTopOf="@+id/text_cache_size_label"
+            tools:text="45 MB" />
+
+        <!-- Кнопка очищення кешу -->
+        <Button
+            android:id="@+id/button_clear_cache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Очистити кеш"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_cache_size_label" />
+
+        <!-- Розділ: Інформація -->
+        <TextView
+            android:id="@+id/text_info_heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Інформація"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_clear_cache" />
+
+        <!-- Політика конфіденційності -->
+        <TextView
+            android:id="@+id/button_privacy_policy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:text="Політика конфіденційності"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_info_heading" />
+
+        <!-- Умови використання -->
+        <TextView
+            android:id="@+id/button_terms_of_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:text="Умови використання"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_privacy_policy" />
+
+        <!-- Про додаток -->
+        <TextView
+            android:id="@+id/button_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:text="Про додаток"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_terms_of_service" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

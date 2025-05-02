@@ -1,0 +1,240 @@
+syntax = "proto3";
+
+package com.secure.messenger.proto;
+
+option java_multiple_files = true;
+option java_package = "com.secure.messenger.proto";
+option java_outer_classname = "MessengerProto";
+
+// Сервіс автентифікації
+service AuthService {
+  // Реєстрація нового користувача
+  rpc Register(RegisterRequest) returns (AuthResponse);
+
+  // Авторизація користувача
+  rpc Login(LoginRequest) returns (AuthResponse);
+
+  // Оновлення токену
+  rpc RefreshToken(RefreshTokenRequest) returns (AuthResponse);
+
+  // Вихід з системи
+  rpc Logout(LogoutRequest) returns (StatusResponse);
+}
+
+// Сервіс для роботи з повідомленнями
+service MessageService {
+  // Відправлення повідомлення (користувачеві або в групу)
+  rpc SendMessage(stream MessageRequest) returns (StatusResponse);
+
+  // Отримання повідомлень
+  rpc ReceiveMessages(ReceiveRequest) returns (stream MessageResponse);
+
+  // Позначення повідомлень як прочитаних
+  rpc MarkAsRead(MarkAsReadRequest) returns (StatusResponse);
+
+  // Видалення повідомлення
+  rpc DeleteMessage(DeleteMessageRequest) returns (StatusResponse);
+}
+
+// Сервіс для роботи з голосовими повідомленнями та рацією
+service VoiceService {
+  // Потокова передача голосу
+  rpc StreamVoice(stream VoiceRequest) returns (stream VoiceResponse);
+
+  // Отримання збереженого голосового повідомлення по фрагментах
+  rpc GetVoiceMessage(VoiceMessageRequest) returns (stream VoiceChunk);
+}
+
+// Сервіс для управління групами
+service GroupService {
+  // Створення нової групи
+  rpc CreateGroup(CreateGroupRequest) returns (GroupResponse);
+
+  // Отримання інформації про групу
+  rpc GetGroup(GetGroupRequest) returns (GroupResponse);
+
+  // Отримання списку груп користувача
+  rpc GetUserGroups(GetUserGroupsRequest) returns (GroupsResponse);
+
+  // Оновлення інформації про групу
+  rpc UpdateGroup(UpdateGroupRequest) returns (GroupResponse);
+
+  // Видалення групи
+  rpc DeleteGroup(DeleteGroupRequest) returns (StatusResponse);
+}
+
+// Запит на реєстрацію
+message RegisterRequest {
+  string username = 1;
+  string phoneNumber = 2;
+  string password = 3;
+  bytes public_key = 4;
+  bytes device_id = 5;
+  string device_name = 6;
+}
+
+// Запит на авторизацію
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+  bytes device_id = 3;
+  string device_name = 4;
+}
+
+// Запит на оновлення токену
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+// Запит на вихід з системи
+message LogoutRequest {
+  string token = 1;
+}
+
+// Відповідь з даними автентифікації
+message AuthResponse {
+  string token = 1;
+  string refresh_token = 2;
+  int64 expires_at = 3;
+  UserProfile user = 4;
+}
+
+// Профіль користувача
+message UserProfile {
+  string user_id = 1;
+  string username = 2;
+  string phoneNumber = 3;
+  bytes public_key = 4;
+  string status = 5;
+}
+
+// Відповідь з статусом операції
+message StatusResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Типи повідомлень
+enum MessageType {
+  TEXT = 0;
+  IMAGE = 1;
+  DOCUMENT = 2;
+  VOICE = 3;
+  REPORT = 4;
+}
+
+// Вміст повідомлення
+message MessageContent {
+  MessageType type = 1;
+  bytes encrypted_data = 2;
+}
+
+// Запит на відправлення повідомлення
+message MessageRequest {
+  string recipient_id = 1;
+  string group_id = 2;
+  MessageContent content = 3;
+}
+
+// Запит на отримання повідомлень
+message ReceiveRequest {
+  int64 since_timestamp = 1;
+  int32 limit = 2;
+}
+
+// Відповідь з повідомленням
+message MessageResponse {
+  string message_id = 1;
+  string sender_id = 2;
+  string sender_name = 3;
+  string recipient_id = 4;
+  string recipient_name = 5;
+  string group_id = 6;
+  string group_name = 7;
+  MessageContent content = 8;
+  int64 timestamp = 9;
+}
+
+// Запит на позначення повідомлень як прочитаних
+message MarkAsReadRequest {
+  repeated string message_ids = 1;
+}
+
+// Запит на видалення повідомлення
+message DeleteMessageRequest {
+  string message_id = 1;
+}
+
+// Запит для голосової трансляції
+message VoiceRequest {
+  string target_id = 1;       // ID користувача або групи
+  bool is_group = 2;          // true якщо цільовий ID є ID групи
+  bytes audio_data = 3;       // Двійкові аудіо дані
+  int32 sequence_number = 4;  // Порядковий номер фрагменту
+}
+
+// Відповідь на голосову трансляцію
+message VoiceResponse {
+  string sender_id = 1;       // ID відправника
+  string channel_id = 2;      // ID каналу (користувача чи групи)
+  int64 timestamp = 3;        // Часова мітка
+}
+
+// Запит на отримання голосового повідомлення
+message VoiceMessageRequest {
+  string message_id = 1;
+}
+
+// Фрагмент голосового повідомлення
+message VoiceChunk {
+  string message_id = 1;
+  bytes chunk_data = 2;
+  int32 sequence_number = 3;
+  bool is_last = 4;
+}
+
+// Запит на створення групи
+message CreateGroupRequest {
+  string name = 1;
+  string description = 2;
+  repeated string initial_member_ids = 3;
+}
+
+// Запит на отримання групи
+message GetGroupRequest {
+  string group_id = 1;
+}
+
+// Відповідь з даними групи
+message GroupResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string admin_id = 4;
+  string admin_username = 5;
+  int32 member_count = 6;
+  int64 created_at = 7;  // unix timestamp
+  bool report_enabled = 8;
+}
+
+// Запит на отримання груп користувача
+message GetUserGroupsRequest {
+  string user_id = 1;
+}
+
+// Відповідь зі списком груп
+message GroupsResponse {
+  repeated GroupResponse groups = 1;
+}
+
+// Запит на оновлення групи
+message UpdateGroupRequest {
+  string group_id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+// Запит на видалення групи
+message DeleteGroupRequest {
+  string group_id = 1;
+}

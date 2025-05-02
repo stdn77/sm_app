@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Secure Messenger</string>
+
+    <!-- Навігаційне меню -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="menu_chats">Чати</string>
+    <string name="menu_groups">Групи</string>
+    <string name="menu_profile">Профіль</string>
+    <string name="menu_settings">Налаштування</string>
+    <string name="menu_category_account">Обліковий запис</string>
+    <string name="menu_logout">Вихід</string>
+    <string name="profile_image">Фото профілю</string>
+
+    <!-- Авторизація -->
+    <string name="login_title">Вхід у систему</string>
+    <string name="register_title">Реєстрація</string>
+    <string name="username_hint">Ім\'я користувача</string>
+    <string name="password_hint">Пароль</string>
+    <string name="password_confirm_hint">Підтвердження пароля</string>
+    <string name="phone_hint">Номер телефону</string>
+    <string name="login_button">Увійти</string>
+    <string name="register_button">Зареєструватись</string>
+    <string name="forgot_password">Забули пароль?</string>
+    <string name="no_account">Немає облікового запису? Зареєструйтесь</string>
+    <string name="has_account">Вже маєте обліковий запис? Увійдіть</string>
+
+    <!-- Верифікація телефону -->
+    <string name="phone_verification_title">Верифікація номера</string>
+    <string name="phone_verification_description">Введіть свій номер телефону для отримання коду підтвердження</string>
+    <string name="code_verification_title">Введення коду</string>
+    <string name="code_verification_description">Введіть код, який було надіслано на ваш номер телефону</string>
+    <string name="resend_code">Надіслати код повторно</string>
+    <string name="send_code_button">Надіслати код</string>
+    <string name="verify_code_button">Підтвердити</string>
+
+    <!-- Чати та повідомлення -->
+    <string name="chat_list_title">Чати</string>
+    <string name="new_chat">Новий чат</string>
+    <string name="new_group">Нова група</string>
+    <string name="message_hint">Повідомлення</string>
+    <string name="send_button">Надіслати</string>
+    <string name="attach_file">Прикріпити файл</string>
+    <string name="record_voice">Записати голосове повідомлення</string>
+    <string name="online">В мережі</string>
+    <string name="offline">Не в мережі</string>
+    <string name="typing">друкує...</string>
+    <string name="search_hint">Пошук</string>
+    <string name="no_messages">Немає повідомлень</string>
+    <string name="no_chats">Немає чатів</string>
+
+    <!-- Групи -->
+    <string name="create_group">Створення групи</string>
+    <string name="group_name">Назва групи</string>
+    <string name="group_description">Опис групи</string>
+    <string name="enable_reports">Активувати функцію доповідей</string>
+    <string name="reports_description">Учасники групи будуть отримувати нагадування про необхідність доповіді.</string>
+    <string name="select_members">Виберіть учасників:</string>
+    <string name="create_group_button">Створити групу</string>
+    <string name="group_info">Інформація про групу</string>
+    <string name="members_count">%d учасників</string>
+    <string name="reports_enabled">Звіти активовані</string>
+    <string name="send_message">Надіслати повідомлення</string>
+
+    <!-- Повідомлення та статуси -->
+    <string name="message_sent">Повідомлення надіслано</string>
+    <string name="message_delivered">Повідомлення доставлено</string>
+    <string name="message_read">Повідомлення прочитано</string>
+    <string name="message_deleted">Повідомлення видалено</string>
+    <string name="sending_message">Надсилання повідомлення...</string>
+    <string name="error_sending_message">Помилка надсилання повідомлення</string>
+    <string name="login_success">Успішний вхід</string>
+    <string name="login_failed">Помилка входу</string>
+    <string name="registration_success">Успішна реєстрація</string>
+    <string name="registration_failed">Помилка реєстрації</string>
+    <string name="logout_success">Успішний вихід</string>
+
+    <!-- Налаштування -->
+    <string name="settings_title">Налаштування</string>
+    <string name="profile_title">Профіль</string>
+    <string name="security_title">Безпека</string>
+    <string name="notifications_title">Сповіщення</string>
+    <string name="theme_title">Тема</string>
+    <string name="language_title">Мова</string>
+    <string name="about_title">Про програму</string>
+    <string name="help_title">Допомога</string>
+    <string name="change_password">Змінити пароль</string>
+    <string name="enable_notifications">Увімкнути сповіщення</string>
+    <string name="dark_theme">Темна тема</string>
+    <string name="light_theme">Світла тема</string>
+    <string name="system_theme">Системна тема</string>
+    <!-- Рядки налаштувань -->
+    <string name="app_settings">Налаштування додатку</string>
+    <string name="notifications">Сповіщення</string>
+    <string name="privacy">Конфіденційність</string>
+    <string name="security">Безпека</string>
+    <string name="theme">Тема</string>
+    <string name="language">Мова</string>
+    <string name="about">Про додаток</string>
+    <string name="version">Версія</string>
+
+
+    <!-- Дії -->
+    <string name="save">Зберегти</string>
+    <string name="cancel">Скасувати</string>
+    <string name="delete">Видалити</string>
+    <string name="edit">Редагувати</string>
+    <string name="copy">Копіювати</string>
+    <string name="share">Поділитися</string>
+    <string name="forward">Переслати</string>
+    <string name="reply">Відповісти</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="back">Назад</string>
+    <string name="next">Далі</string>
+
+    <!-- Повідомлення про помилки -->
+    <string name="error_connection">Помилка з\'єднання</string>
+    <string name="error_server">Помилка сервера</string>
+    <string name="error_auth">Помилка авторизації</string>
+    <string name="error_validation">Помилка валідації даних</string>
+    <string name="error_unknown">Невідома помилка</string>
+    <string name="error_empty_username">Введіть ім\'я користувача</string>
+    <string name="error_empty_password">Введіть пароль</string>
+    <string name="error_empty_phone">Введіть номер телефону</string>
+    <string name="error_invalid_phone">Неправильний формат номера телефону</string>
+    <string name="error_passwords_not_match">Паролі не співпадають</string>
+
+    <!-- Реєстрація -->
+    <string name="title_register">Реєстрація</string>
+    <string name="subtitle_register">Створіть обліковий запис для безпечного спілкування</string>
+    <string name="hint_username">Ім\'я користувача</string>
+    <string name="hint_phone">Номер телефону</string>
+    <string name="hint_password">Пароль</string>
+    <string name="hint_confirm_password">Підтвердження пароля</string>
+    <string name="button_register">Зареєструватися</string>
+    <string name="already_have_account">Вже маєте обліковий запис?</string>
+    <string name="button_login">Увійти</string>
+    <string name="error_empty_confirm_password">Підтвердіть пароль</string>
+
+    <string name="title_contacts">Контакти</string>
+    <string name="no_contacts">Немає доступних контактів</string>
+
+    <string name="title_code_verification">Перевірка коду</string> <string name="title_enter_code">Введіть код</string>
+    <string name="hint_verification_code">Код підтвердження</string>
+    <string name="verify_button">Підтвердити</string>
+    <string name="resend_code_button">Надіслати код ще раз</string> <string name="code_sent_to_info">Ми надіслали код на номер %1$s</string> <string name="error_phone_not_passed">Помилка: номер телефону не передано.</string>
+    <string name="verification_successful">Номер телефону успішно підтверджено!</string>
+
+    <!-- Рядки помилок -->
+    <string name="error_invalid_code">Невірний код підтвердження</string>
+    <string name="error_verifying_code">Помилка під час перевірки коду</string>
+    <string name="error_empty_code">Будь ласка, введіть код</string>
+    <string name="error_network">Помилка мережі</string>
+
+
+        <!-- Загальні рядки -->
+        <string name="ok">OK</string>
+        <string name="search">Пошук</string>
+        <string name="settings">Налаштування</string>
+        <string name="logout">Вийти</string>
+        <string name="error">Помилка</string>
+        <string name="success">Успішно</string>
+
+        <!-- Рядки аутентифікації -->
+        <string name="login">Увійти</string>
+        <string name="register">Зареєструватися</string>
+        <string name="username">Ім\'я користувача</string>
+        <string name="password">Пароль</string>
+        <string name="phone_number">Номер телефону</string>
+        <string name="verification_code">Код підтвердження</string>
+        <string name="create_account">Створити обліковий запис</string>
+
+
+        <!-- Рядки навігації -->
+        <string name="chats">Чати</string>
+        <string name="groups">Групи</string>
+        <string name="contacts">Контакти</string>
+        <string name="profile">Профіль</string>
+
+
+        <!-- Рядки чату -->
+
+        <string name="take_photo">Зробити фото</string>
+        <string name="choose_image">Вибрати зображення</string>
+        <string name="choose_file">Вибрати файл</string>
+        <string name="message_copied">Повідомлення скопійовано</string>
+        <string name="message_status">Статус повідомлення</string>
+        <string name="empty_chat">Немає повідомлень</string>
+        <string name="start_conversation">Почніть спілкування вже зараз!</string>
+
+        <!-- Рядки групи -->
+
+        <string name="add_members">Додати учасників</string>
+        <string name="leave_group">Покинути групу</string>
+        <string name="delete_group">Видалити групу</string>
+        <string name="members">Учасники</string>
+        <string name="admin">Адміністратор</string>
+
+        <!-- Рядки профілю -->
+        <string name="edit_profile">Редагувати профіль</string>
+        <string name="change_avatar">Змінити аватар</string>
+        <string name="status">Статус</string>
+        <string name="last_seen">Був(-ла) в мережі</string>
+
+</resources>

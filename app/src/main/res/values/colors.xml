@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#4CAF50</color>
+
+    <!-- Кольори для повідомлень -->
+    <color name="colorMessageSent">#E3F2FD</color>
+    <color name="colorMessageReceived">#FFFFFF</color>
+    <color name="colorSenderName">#1565C0</color>
+
+    <!-- Інші кольори додатку -->
+    <color name="colorBackground">#F5F5F5</color>
+    <color name="colorTextPrimary">#212121</color>
+    <color name="colorTextSecondary">#757575</color>
+    <color name="colorDivider">#BDBDBD</color>
+    <color name="colorError">#F44336</color>
+    <color name="colorSuccess">#4CAF50</color>
+</resources>
