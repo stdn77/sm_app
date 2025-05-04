@@ -8,7 +8,7 @@ import com.secure.messenger.android.data.local.AppDatabase;
 import com.secure.messenger.android.data.local.TokenManager;
 import com.secure.messenger.android.data.local.dao.MessageDao;
 import com.secure.messenger.android.data.local.entity.MessageEntity;
-import com.secure.messenger.android.util.CryptoUtils;
+import com.secure.messenger.android.util.SecurityUtils;
 import com.secure.messenger.proto.MessageContent;
 import com.secure.messenger.proto.MessageRequest;
 import com.secure.messenger.proto.MessageResponse;
@@ -39,6 +39,7 @@ public class MessageRepository {
     private final MessageDao messageDao;
     private final Executor executor;
     private final Context context;
+    private final SecurityUtils securityUtils;
 
     /**
      * Створює новий екземпляр репозиторію повідомлень
@@ -52,6 +53,7 @@ public class MessageRepository {
         this.tokenManager = new TokenManager(context);
         this.messageDao = AppDatabase.getInstance(context).messageDao();
         this.executor = Executors.newSingleThreadExecutor();
+        this.securityUtils = new SecurityUtils(context);
     }
 
     /**
@@ -324,11 +326,12 @@ public class MessageRepository {
      */
     private byte[] encryptContentForUser(String userId, byte[] content) {
         try {
-            // В справжній імплементації тут треба отримати публічний ключ користувача
-            // та виконати шифрування
-            // Для простоти використовуємо простий AES-шифрування
-            SecretKey secretKey = CryptoUtils.generateAesKey();
-            return CryptoUtils.encryptWithAesGcm(content, secretKey);
+            // В реальній імплементації тут треба отримати публічний ключ користувача
+            // та виконати шифрування використовуючи SecurityUtils
+
+            // Для простоти використовуємо симетричне AES-шифрування
+            SecretKey secretKey = SecurityUtils.generateAESKey();
+            return SecurityUtils.encryptWithAES(content, secretKey);
         } catch (Exception e) {
             Log.e(TAG, "Error encrypting content for user: " + e.getMessage(), e);
             throw new RuntimeException("Error encrypting content: " + e.getMessage());
@@ -340,11 +343,19 @@ public class MessageRepository {
      */
     private byte[] encryptContentForGroup(String groupId, byte[] content) {
         try {
-            // В справжній імплементації тут треба отримати ключ групи
-            // та виконати шифрування
-            // Для простоти використовуємо простий AES-шифрування
-            SecretKey secretKey = CryptoUtils.generateAesKey();
-            return CryptoUtils.encryptWithAesGcm(content, secretKey);
+            // В реальній імплементації тут треба отримати ключ групи
+            // з securityUtils та виконати шифрування
+
+            // Отримуємо ключ групи
+            SecretKey groupKey = securityUtils.getGroupKey(groupId);
+
+            // Якщо ключ не знайдено, генеруємо новий
+            if (groupKey == null) {
+                groupKey = securityUtils.generateGroupKey(groupId);
+            }
+
+            // Шифруємо зміст
+            return SecurityUtils.encryptWithAES(content, groupKey);
         } catch (Exception e) {
             Log.e(TAG, "Error encrypting content for group: " + e.getMessage(), e);
             throw new RuntimeException("Error encrypting content: " + e.getMessage());
@@ -425,7 +436,7 @@ public class MessageRepository {
      * Перетворює відповідь сервера на локальну сутність
      */
     private MessageEntity mapMessageResponseToEntity(MessageResponse response) {
-        String messageId = response.getId();
+        String messageId = response.getMessageId();
         String senderId = response.getSenderId();
         String recipientId = response.hasRecipientId() ? response.getRecipientId() : null;
         String groupId = response.hasGroupId() ? response.getGroupId() : null;
@@ -433,7 +444,7 @@ public class MessageRepository {
         byte[] encryptedContent = response.getContent().getEncryptedData().toByteArray();
 
         LocalDateTime createdAt = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(response.getCreatedAt()), ZoneId.systemDefault());
+                Instant.ofEpochMilli(response.getTimestamp()), ZoneId.systemDefault());
 
         LocalDateTime expiresAt = response.hasExpiresAt() ?
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(response.getExpiresAt()), ZoneId.systemDefault()) :

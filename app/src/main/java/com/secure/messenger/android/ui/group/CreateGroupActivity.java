@@ -13,7 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.secure.messenger.android.R;
+import com.secure.messenger.android.data.model.User;
 import com.secure.messenger.android.ui.common.BaseActivity;
+import com.secure.messenger.android.ui.group.adapter.ContactSelectionAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Активність для створення нової групи
@@ -26,6 +31,7 @@ public class CreateGroupActivity extends BaseActivity {
     private Switch switchReportEnabled;
     private RecyclerView recyclerViewContacts;
     private Button buttonCreateGroup;
+    private ContactSelectionAdapter contactAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class CreateGroupActivity extends BaseActivity {
 
         // Ініціалізація UI
         initViews();
+        setupContactAdapter();
         setupListeners();
         observeViewModel();
 
@@ -54,8 +61,22 @@ public class CreateGroupActivity extends BaseActivity {
         switchReportEnabled = findViewById(R.id.switch_report_enabled);
         recyclerViewContacts = findViewById(R.id.recycler_view_contacts);
         buttonCreateGroup = findViewById(R.id.button_create_group);
+    }
 
-        // TODO: Налаштувати RecyclerView та адаптер для контактів
+    private void setupContactAdapter() {
+        contactAdapter = new ContactSelectionAdapter();
+        recyclerViewContacts.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewContacts.setAdapter(contactAdapter);
+
+        // Налаштування обробника вибору контактів
+        contactAdapter.setOnContactSelectedListener(new ContactSelectionAdapter.OnContactSelectedListener() {
+            @Override
+            public boolean onContactSelected(User contact, int position) {
+                // Змінюємо стан вибору контакту
+                boolean isSelected = viewModel.toggleContactSelection(contact.getId());
+                return isSelected;
+            }
+        });
     }
 
     private void setupListeners() {
@@ -63,7 +84,35 @@ public class CreateGroupActivity extends BaseActivity {
     }
 
     private void observeViewModel() {
-        // TODO: Спостереження за змінами даних
+        // Спостереження за списком контактів
+        viewModel.getContacts().observe(this, contacts -> {
+            contactAdapter.setContacts(contacts);
+        });
+
+        // Спостереження за станом завантаження
+        viewModel.isLoading().observe(this, isLoading -> {
+            if (isLoading) {
+                showProgress("Завантаження...");
+            } else {
+                hideProgress();
+            }
+        });
+
+        // Спостереження за помилками
+        viewModel.getError().observe(this, error -> {
+            if (error != null) {
+                showToast(error);
+                viewModel.errorHandled();
+            }
+        });
+
+        // Спостереження за успішним створенням групи
+        viewModel.isGroupCreated().observe(this, isCreated -> {
+            if (isCreated) {
+                showToast("Групу успішно створено");
+                finish();
+            }
+        });
     }
 
     private void createGroup() {
@@ -77,8 +126,12 @@ public class CreateGroupActivity extends BaseActivity {
             return;
         }
 
-        // Отримання вибраних користувачів
-        // TODO: Отримати список вибраних користувачів
+        // Перевірка вибраних контактів
+        int selectedCount = viewModel.getSelectedContactsCount();
+        if (selectedCount == 0) {
+            showToast("Виберіть хоча б одного учасника для групи");
+            return;
+        }
 
         // Показ прогресу
         showProgress("Створення групи...");

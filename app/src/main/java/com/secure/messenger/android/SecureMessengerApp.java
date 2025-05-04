@@ -7,7 +7,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.secure.messenger.android.data.local.PreferenceManager;
-import com.secure.messenger.android.util.CryptoUtils;
+import com.secure.messenger.android.util.SecurityUtils;
 
 /**
  * Основний клас додатку.
@@ -60,11 +60,10 @@ public class SecureMessengerApp extends Application {
      */
     private void initializeCrypto() {
         try {
-            // Генерація ключів при першому запуску
+            SecurityUtils securityUtils = new SecurityUtils(this);
             if (!preferenceManager.isKeysGenerated()) {
-                CryptoUtils.generateAndStoreKeys(this);
+                securityUtils.generateAndStoreKeys();
                 preferenceManager.setKeysGenerated(true);
-                Log.i(TAG, "Cryptographic keys generated successfully");
             }
         } catch (Exception e) {
             Log.e(TAG, "Error initializing crypto: " + e.getMessage(), e);

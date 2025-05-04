@@ -197,40 +197,6 @@ public class ModelConverter {
     }
 
     /**
-     * Конвертує ChatGroupEntity в модель ChatGroup для презентаційного шару
-     */
-    public static ChatGroup convertToChatGroup(ChatGroupEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        return new ChatGroup(
-                entity.getId(),
-                entity.getName(),
-                entity.getDescription(),
-                entity.getAdminId(),
-                entity.isReportEnabled(),
-                entity.getMemberCount(),
-                entity.getEncryptedGroupKey(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
-        );
-    }
-
-    /**
-     * Конвертує список ChatGroupEntity в список ChatGroup
-     */
-    public static List<ChatGroup> convertToChatGroups(List<ChatGroupEntity> entities) {
-        List<ChatGroup> groups = new ArrayList<>();
-        if (entities != null) {
-            for (ChatGroupEntity entity : entities) {
-                groups.add(convertToChatGroup(entity));
-            }
-        }
-        return groups;
-    }
-
-    /**
      * Конвертує ChatGroupEntity в модель Group для презентаційного шару
      */
     public static Group convertEntityToGroup(ChatGroupEntity entity) {

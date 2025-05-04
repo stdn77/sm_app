@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.secure.messenger.android.data.api.AuthServiceClient;
 import com.secure.messenger.android.data.local.TokenManager;
-import com.secure.messenger.android.util.CryptoUtils;
+import com.secure.messenger.android.util.SecurityUtils;
 import com.secure.messenger.proto.AuthResponse;
 import com.secure.messenger.proto.LoginRequest;
 import com.secure.messenger.proto.RegisterRequest;
@@ -99,7 +99,7 @@ public class AuthRepository {
         executor.execute(() -> {
             try {
                 // Генерація ключової пари для E2EE
-                byte[] publicKey = CryptoUtils.getPublicKeyForServer();
+                byte[] publicKey = SecurityUtils.getPublicKeyForServer();
                 if (publicKey == null) {
                     throw new RuntimeException("Failed to generate encryption keys");
                 }
@@ -222,7 +222,7 @@ public class AuthRepository {
 
         // Якщо ідентифікатор не існує, генеруємо новий
         if (deviceId == null) {
-            deviceId = CryptoUtils.generateDeviceId();
+            deviceId = SecurityUtils.generateDeviceId();
             context.getSharedPreferences("device_prefs", Context.MODE_PRIVATE)
                     .edit()
                     .putString("device_id", deviceId)

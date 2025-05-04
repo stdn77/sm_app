@@ -5,12 +5,12 @@ import android.util.Log;
 
 import com.secure.messenger.android.data.api.GroupServiceClient;
 import com.secure.messenger.android.data.local.AppDatabase;
-import com.secure.messenger.android.data.local.KeyManager;
 import com.secure.messenger.android.data.local.TokenManager;
 import com.secure.messenger.android.data.local.dao.ChatGroupDao;
 import com.secure.messenger.android.data.local.entity.ChatGroupEntity;
 import com.secure.messenger.android.data.model.Group;
 import com.secure.messenger.android.data.model.ModelConverter;
+import com.secure.messenger.android.util.SecurityUtils;
 import com.secure.messenger.proto.CreateGroupRequest;
 import com.secure.messenger.proto.DeleteGroupRequest;
 import com.secure.messenger.proto.GetGroupRequest;
@@ -38,7 +38,7 @@ public class GroupRepository {
     private final GroupServiceClient groupServiceClient;
     private final ChatGroupDao chatGroupDao;
     private final TokenManager tokenManager;
-    private final KeyManager keyManager;
+    private final SecurityUtils securityUtils;
     private final Executor executor;
 
     /**
@@ -52,7 +52,7 @@ public class GroupRepository {
         this.groupServiceClient = groupServiceClient;
         this.chatGroupDao = AppDatabase.getInstance(context).chatGroupDao();
         this.tokenManager = new TokenManager(context);
-        this.keyManager = new KeyManager(context);
+        this.securityUtils = new SecurityUtils(context);
         this.executor = Executors.newSingleThreadExecutor();
     }
 
@@ -90,7 +90,7 @@ public class GroupRepository {
 
                 // Генерація ключа групи
                 try {
-                    SecretKey groupKey = keyManager.generateGroupKey(groupEntity.getId());
+                    SecretKey groupKey = securityUtils.generateGroupKey(groupEntity.getId());
                     // Збереження зашифрованого ключа
                     groupEntity.setEncryptedGroupKey(groupKey.getEncoded());
                 } catch (Exception e) {
@@ -101,17 +101,7 @@ public class GroupRepository {
                 chatGroupDao.insert(groupEntity);
 
                 // Створення моделі групи для відповіді
-                Group group = new Group(
-                        groupEntity.getId(),
-                        groupEntity.getName(),
-                        groupEntity.getDescription(),
-                        groupEntity.getAdminId(),
-                        ""  // AdminUsername потрібно отримати окремо
-                );
-                group.setCreatedAt(groupEntity.getCreatedAt());
-                group.setMemberCount(groupEntity.getMemberCount());
-                group.setReportEnabled(groupEntity.isReportEnabled());
-
+                Group group = ModelConverter.convertEntityToGroup(groupEntity);
                 callback.onSuccess(group);
             } catch (Exception e) {
                 Log.e(TAG, "Error creating group: " + e.getMessage(), e);
@@ -133,7 +123,7 @@ public class GroupRepository {
                 ChatGroupEntity localGroup = chatGroupDao.getGroupById(groupId);
 
                 if (localGroup != null) {
-                    Group group = convertEntityToGroup(localGroup);
+                    Group group = ModelConverter.convertEntityToGroup(localGroup);
                     callback.onSuccess(group);
                 } else {
                     // Якщо локально немає, запитуємо з сервера
@@ -177,7 +167,7 @@ public class GroupRepository {
             chatGroupDao.insert(groupEntity);
 
             // Створення моделі групи для відповіді
-            Group group = convertEntityToGroup(groupEntity);
+            Group group = ModelConverter.convertEntityToGroup(groupEntity);
             callback.onSuccess(group);
         } catch (Exception e) {
             Log.e(TAG, "Error fetching group from server: " + e.getMessage(), e);
@@ -203,7 +193,7 @@ public class GroupRepository {
                 List<ChatGroupEntity> localGroups = chatGroupDao.getAllGroups();
 
                 if (!localGroups.isEmpty()) {
-                    List<Group> groups = convertEntitiesToGroups(localGroups);
+                    List<Group> groups = ModelConverter.convertEntitiesToGroups(localGroups);
                     callback.onSuccess(groups);
                 }
 
@@ -249,7 +239,7 @@ public class GroupRepository {
             }
 
             // Створення моделей груп для відповіді
-            List<Group> groups = convertEntitiesToGroups(groupEntities);
+            List<Group> groups = ModelConverter.convertEntitiesToGroups(groupEntities);
             callback.onSuccess(groups);
         } catch (Exception e) {
             Log.e(TAG, "Error fetching user groups from server: " + e.getMessage(), e);
@@ -334,7 +324,7 @@ public class GroupRepository {
                     }
 
                     // Видалення ключа групи з кешу
-                    keyManager.removeGroupKey(groupId);
+                    securityUtils.removeGroupKey(groupId);
 
                     callback.onSuccess();
                 } else {
@@ -389,43 +379,6 @@ public class GroupRepository {
                 callback.onError("Помилка при оновленні ключа групи: " + e.getMessage());
             }
         });
-    }
-
-    /**
-     * Перетворює сутність групи в модель групи
-     *
-     * @param entity сутність групи
-     * @return модель групи
-     */
-    private Group convertEntityToGroup(ChatGroupEntity entity) {
-        Group group = new Group(
-                entity.getId(),
-                entity.getName(),
-                entity.getDescription(),
-                entity.getAdminId(),
-                ""  // AdminUsername потрібно отримати окремо
-        );
-        group.setCreatedAt(entity.getCreatedAt());
-        group.setMemberCount(entity.getMemberCount());
-        group.setReportEnabled(entity.isReportEnabled());
-
-        // TODO: Додати отримання списку учасників групи
-
-        return group;
-    }
-
-    /**
-     * Перетворює список сутностей груп в список моделей груп
-     *
-     * @param entities список сутностей груп
-     * @return список моделей груп
-     */
-    private List<Group> convertEntitiesToGroups(List<ChatGroupEntity> entities) {
-        List<Group> groups = new ArrayList<>();
-        for (ChatGroupEntity entity : entities) {
-            groups.add(convertEntityToGroup(entity));
-        }
-        return groups;
     }
 
     /**
