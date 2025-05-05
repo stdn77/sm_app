@@ -29,6 +29,10 @@ public class MessageAdapter extends BaseAdapter<Message, RecyclerView.ViewHolder
      * @param currentUserId ID поточного користувача
      * @param isGroupChat чи є чат груповим
      */
+    MessageAdapter() {
+        currentUserId = preferenceManager.getUserId();
+    }
+
     public MessageAdapter(String currentUserId, boolean isGroupChat) {
         this.currentUserId = currentUserId;
         this.isGroupChat = isGroupChat;

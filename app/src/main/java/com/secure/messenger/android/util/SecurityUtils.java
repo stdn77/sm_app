@@ -389,6 +389,24 @@ public class SecurityUtils {
     }
 
     /**
+     * Перетворює байтовий масив у публічний ключ
+     *
+     * @param keyBytes байтовий масив, що містить закодований публічний ключ
+     * @return об'єкт PublicKey або null у разі помилки
+     */
+    public static PublicKey bytesToPublicKey(byte[] keyBytes) {
+        try {
+            java.security.spec.X509EncodedKeySpec keySpec = new java.security.spec.X509EncodedKeySpec(keyBytes);
+            java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
+            return keyFactory.generatePublic(keySpec);
+        } catch (Exception e) {
+            Log.e(TAG, "Error converting bytes to public key: " + e.getMessage(), e);
+            return null;
+        }
+    }
+
+
+    /**
      * Розшифровує дані з використанням AES-GCM
      *
      * @param encryptedData зашифровані дані з IV

@@ -2,6 +2,7 @@ package com.secure.messenger.android.data.api;
 
 import android.util.Log;
 
+import com.secure.messenger.proto.AuthServiceGrpc;
 import com.secure.messenger.proto.DeleteMessageRequest;
 import com.secure.messenger.proto.MarkAsReadRequest;
 import com.secure.messenger.proto.MessageRequest;
@@ -63,9 +64,10 @@ public class MessageServiceClient {
             metadata.put(key, "Bearer " + token);
 
             // Оновлюємо стаби з новими метаданими
-            asyncStub = MetadataUtils.attachHeaders(MessageServiceGrpc.newStub(channel), metadata);
-            blockingStub = MetadataUtils.attachHeaders(MessageServiceGrpc.newBlockingStub(channel), metadata);
-
+            blockingStub = AuthServiceGrpc.newBlockingStub(channel)
+                    .withInterceptors(io.grpc.ClientInterceptors.metadataInterceptor(metadata));
+            asyncStub = AuthServiceGrpc.newStub(channel)
+                    .withInterceptors(io.grpc.ClientInterceptors.metadataInterceptor(metadata));
             Log.d(TAG, "Auth token set for MessageServiceClient");
         }
     }
@@ -161,24 +163,14 @@ public class MessageServiceClient {
 
         Log.d(TAG, "Marking messages as read: " + messageIds);
 
-        blockingStub.markAsRead(request, new StreamObserver<StatusResponse>() {
-            @Override
-            public void onNext(StatusResponse response) {
-                Log.d(TAG, "Mark as read status: " + response.getSuccess());
-                callback.onResponse(response);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                Log.e(TAG, "Error marking messages as read: " + t.getMessage(), t);
-                callback.onError(t);
-            }
-
-            @Override
-            public void onCompleted() {
-                Log.d(TAG, "Mark as read completed");
-            }
-        });
+        try {
+            // Виклик блокуючого методу без StreamObserver
+            StatusResponse response = blockingStub.markAsRead(request);
+            callback.onResponse(response);
+        } catch (Exception e) {
+            Log.e(TAG, "Error marking messages as read: " + e.getMessage(), e);
+            callback.onError(e);
+        }
     }
 
     /**
@@ -194,24 +186,14 @@ public class MessageServiceClient {
 
         Log.d(TAG, "Deleting message: " + messageId);
 
-        blockingStub.deleteMessage(request, new StreamObserver<StatusResponse>() {
-            @Override
-            public void onNext(StatusResponse response) {
-                Log.d(TAG, "Delete message status: " + response.getSuccess());
-                callback.onResponse(response);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                Log.e(TAG, "Error deleting message: " + t.getMessage(), t);
-                callback.onError(t);
-            }
-
-            @Override
-            public void onCompleted() {
-                Log.d(TAG, "Delete message completed");
-            }
-        });
+        try {
+            // Виклик блокуючого методу без StreamObserver
+            StatusResponse response = blockingStub.deleteMessage(request);
+            callback.onResponse(response);
+        } catch (Exception e) {
+            Log.e(TAG, "Error deleting message: " + e.getMessage(), e);
+            callback.onError(e);
+        }
     }
 
     /**

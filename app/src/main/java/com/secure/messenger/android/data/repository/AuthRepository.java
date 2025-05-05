@@ -57,36 +57,37 @@ public class AuthRepository {
      *
      * @param username ім'я користувача
      * @param password пароль
-     * @param callback колбек з результатом операції
+     * @return true, якщо вхід успішний, false - якщо ні
      */
-    public void login(String username, String password, AuthCallback callback) {
-        executor.execute(() -> {
-            try {
-                // Створення запиту на логін
-                String deviceId = getOrGenerateDeviceId();
+    public boolean login(String username, String password) {
+        try {
+            // Створення запиту на логін
+            String deviceId = getOrGenerateDeviceId();
 
-                LoginRequest request = LoginRequest.newBuilder()
-                        .setUsername(username)
-                        .setPassword(password)
-                        .setDeviceId(ByteString.copyFromUtf8(deviceId))
-                        .setDeviceName(android.os.Build.MODEL)
-                        .build();
+            LoginRequest request = LoginRequest.newBuilder()
+                    .setUsername(username)
+                    .setPassword(password)
+                    .setDeviceId(ByteString.copyFromUtf8(deviceId))
+                    .setDeviceName(android.os.Build.MODEL)
+                    .build();
 
-                // Виконання запиту
-                AuthResponse response = authServiceClient.login(request);
+            // Виконання запиту
+            AuthResponse response = authServiceClient.login(request);
 
+            // Перевірка успішності відповіді
+            if (response != null && response.getToken() != null && !response.getToken().isEmpty()) {
                 // Збереження токенів
                 saveAuthResponse(response);
-
-                // Оповіщення про успішний вхід
-                callback.onSuccess();
-            } catch (Exception e) {
-                Log.e(TAG, "Login error: " + e.getMessage(), e);
-                callback.onError(e.getMessage());
+                return true;
+            } else {
+                Log.e(TAG, "Login failed: empty or invalid response");
+                return false;
             }
-        });
+        } catch (Exception e) {
+            Log.e(TAG, "Login error: " + e.getMessage(), e);
+            return false;
+        }
     }
-
     /**
      * Виконує реєстрацію нового користувача
      *

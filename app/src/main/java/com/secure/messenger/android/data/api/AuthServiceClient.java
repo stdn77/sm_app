@@ -10,6 +10,7 @@ import com.secure.messenger.proto.RefreshTokenRequest;
 import com.secure.messenger.proto.RegisterRequest;
 import com.secure.messenger.proto.StatusResponse;
 
+import io.grpc.ClientInterceptor;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -51,14 +52,17 @@ public class AuthServiceClient {
      */
     public void setAuthToken(String token) {
         if (token != null && !token.isEmpty()) {
-            // Додаємо токен до метаданих запитів
+            // Створюємо метадані для HTTP заголовків
             Metadata metadata = new Metadata();
             Metadata.Key<String> key = Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
             metadata.put(key, "Bearer " + token);
 
-            // Оновлюємо стаби з новими метаданими
-            blockingStub = MetadataUtils.attachHeaders(AuthServiceGrpc.newBlockingStub(channel), metadata);
-            asyncStub = MetadataUtils.attachHeaders(AuthServiceGrpc.newStub(channel), metadata);
+            // Створюємо інтерцептор для додавання заголовків
+            ClientInterceptor interceptor = MetadataUtils.newAttachHeadersInterceptor(metadata);
+
+            // Оновлюємо стаби з новим інтерцептором
+            blockingStub = AuthServiceGrpc.newBlockingStub(channel).withInterceptors(interceptor);
+            asyncStub = AuthServiceGrpc.newStub(channel).withInterceptors(interceptor);
 
             Log.d(TAG, "Auth token set for gRPC client");
         }
@@ -105,6 +109,7 @@ public class AuthServiceClient {
      */
     public StatusResponse logout(String token) {
         Log.d(TAG, "Logging out");
+        setAuthToken(token);
         LogoutRequest request = LogoutRequest.newBuilder()
                 .setToken(token)
                 .build();
