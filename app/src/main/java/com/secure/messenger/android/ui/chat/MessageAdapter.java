@@ -1,5 +1,6 @@
 package com.secure.messenger.android.ui.chat;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.secure.messenger.android.R;
+import com.secure.messenger.android.data.local.PreferenceManager;
 import com.secure.messenger.android.data.model.Message;
 import com.secure.messenger.android.ui.common.adapter.BaseAdapter;
 
@@ -21,7 +23,14 @@ public class MessageAdapter extends BaseAdapter<Message, RecyclerView.ViewHolder
     private static final int VIEW_TYPE_OTHER_MESSAGE = 1;
 
     private final String currentUserId;
-    private final boolean isGroupChat;
+    private final PreferenceManager preferenceManager;
+
+    public MessageAdapter(Context context) {
+        this.preferenceManager = new PreferenceManager(context);
+        currentUserId = preferenceManager.getUserId();
+    }
+
+
 
     /**
      * Конструктор адаптера
@@ -29,13 +38,9 @@ public class MessageAdapter extends BaseAdapter<Message, RecyclerView.ViewHolder
      * @param currentUserId ID поточного користувача
      * @param isGroupChat чи є чат груповим
      */
-    MessageAdapter() {
-        currentUserId = preferenceManager.getUserId();
-    }
-
-    public MessageAdapter(String currentUserId, boolean isGroupChat) {
+     public MessageAdapter(String currentUserId, boolean isGroupChat, PreferenceManager preferenceManager) {
         this.currentUserId = currentUserId;
-        this.isGroupChat = isGroupChat;
+         this.preferenceManager = preferenceManager;
     }
 
     @Override
@@ -179,14 +184,14 @@ public class MessageAdapter extends BaseAdapter<Message, RecyclerView.ViewHolder
 
             // Встановлюємо час повідомлення
             timeText.setText(message.getFormattedTime());
-
-            // Показуємо ім'я відправника в групових чатах
-            if (isGroupChat) {
-                senderNameText.setVisibility(View.VISIBLE);
-                senderNameText.setText(message.getSenderName());
-            } else {
-                senderNameText.setVisibility(View.GONE);
-            }
+//
+//            // Показуємо ім'я відправника в групових чатах
+//            if (isGroupChat) {
+//                senderNameText.setVisibility(View.VISIBLE);
+//                senderNameText.setText(message.getSenderName());
+//            } else {
+//                senderNameText.setVisibility(View.GONE);
+//            }
 
             // Налаштовуємо аватар (заглушка)
             // TODO: Завантажити реальний аватар

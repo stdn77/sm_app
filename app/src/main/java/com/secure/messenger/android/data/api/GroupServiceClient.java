@@ -57,7 +57,9 @@ public class GroupServiceClient {
             metadata.put(key, "Bearer " + token);
 
             // Оновлюємо стаб з новими метаданими
-            blockingStub = MetadataUtils.attachHeaders(GroupServiceGrpc.newBlockingStub(channel), metadata);
+            blockingStub = GroupServiceGrpc.newBlockingStub(channel)
+                    .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
+
 
             Log.d(TAG, "Auth token set for GroupServiceClient");
         }

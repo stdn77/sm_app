@@ -2,6 +2,7 @@ package com.secure.messenger.android.data.local.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDateTime;
@@ -45,6 +46,7 @@ public class UserEntity {
      * @param lastActive час останньої активності
      * @param isContact чи є користувач контактом
      */
+    @Ignore
     public UserEntity(@NonNull String id, String username, String phoneNumber, String status,
                       byte[] publicKey, LocalDateTime lastActive, boolean isContact) {
         this.id = id;

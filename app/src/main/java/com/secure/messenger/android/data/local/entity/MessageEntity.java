@@ -3,6 +3,7 @@ package com.secure.messenger.android.data.local.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -74,6 +75,7 @@ public class MessageEntity {
     /**
      * Конструктор з параметрами
      */
+    @Ignore
     public MessageEntity(@NonNull String id, String senderId, String recipientId, String groupId,
                          String messageType, byte[] encryptedContent, LocalDateTime createdAt,
                          LocalDateTime expiresAt, boolean isRead, boolean isSent, boolean isDelivered) {

@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.secure.messenger.android.data.local.PreferenceManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     protected List<T> items = new ArrayList<>();
     protected OnItemClickListener<T> onItemClickListener;
     protected OnItemLongClickListener<T> onItemLongClickListener;
+    protected PreferenceManager preferenceManager;
 
     /**
      * Встановлює слухача кліків по елементах

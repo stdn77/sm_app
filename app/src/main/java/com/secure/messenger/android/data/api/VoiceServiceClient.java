@@ -61,9 +61,10 @@ public class VoiceServiceClient {
             metadata.put(key, "Bearer " + token);
 
             // Оновлюємо стаби з новими метаданими
-            asyncStub = MetadataUtils.attachHeaders(VoiceServiceGrpc.newStub(channel), metadata);
-            blockingStub = MetadataUtils.attachHeaders(VoiceServiceGrpc.newBlockingStub(channel), metadata);
-
+            asyncStub = VoiceServiceGrpc.newStub(channel)
+                    .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
+            blockingStub = VoiceServiceGrpc.newBlockingStub(channel)
+                    .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
             Log.d(TAG, "Auth token set for VoiceServiceClient");
         }
     }
@@ -119,7 +120,7 @@ public class VoiceServiceClient {
                 .build();
 
         // Створюємо стрім для отримання фрагментів
-        blockingStub.getVoiceMessage(request, new StreamObserver<VoiceChunk>() {
+        asyncStub.getVoiceMessage(request, new StreamObserver<VoiceChunk>() {
             @Override
             public void onNext(VoiceChunk chunk) {
                 Log.d(TAG, "Received voice chunk: " + chunk.getSequenceNumber());
@@ -160,7 +161,7 @@ public class VoiceServiceClient {
             final Throwable[] error = new Throwable[1];
 
             // Отримуємо фрагменти голосового повідомлення
-            blockingStub.getVoiceMessage(request, new StreamObserver<VoiceChunk>() {
+            asyncStub.getVoiceMessage(request, new StreamObserver<VoiceChunk>() {
                 @Override
                 public void onNext(VoiceChunk chunk) {
                     chunks.add(chunk.getChunkData().toByteArray());

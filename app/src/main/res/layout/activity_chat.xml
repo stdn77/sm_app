@@ -51,7 +51,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/attach_file"
             android:src="@drawable/ic_attach_file"
-            android:tint="@color/colorAccent"
+            app:tint="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +80,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/send_message"
             android:src="@drawable/ic_send"
-            android:tint="@color/colorAccent"
+            app:tint="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -64,10 +64,10 @@ public class MessageServiceClient {
             metadata.put(key, "Bearer " + token);
 
             // Оновлюємо стаби з новими метаданими
-            blockingStub = AuthServiceGrpc.newBlockingStub(channel)
-                    .withInterceptors(io.grpc.ClientInterceptors.metadataInterceptor(metadata));
-            asyncStub = AuthServiceGrpc.newStub(channel)
-                    .withInterceptors(io.grpc.ClientInterceptors.metadataInterceptor(metadata));
+            blockingStub = MessageServiceGrpc.newBlockingStub(channel)
+                    .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
+            asyncStub = MessageServiceGrpc.newStub(channel)
+                    .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
             Log.d(TAG, "Auth token set for MessageServiceClient");
         }
     }
@@ -129,7 +129,7 @@ public class MessageServiceClient {
         StreamObserver<MessageResponse> responseObserver = new StreamObserver<MessageResponse>() {
             @Override
             public void onNext(MessageResponse response) {
-                Log.d(TAG, "Received message: " + response.getId());
+                Log.d(TAG, "Received message: " + response.getMessageId());
                 callback.onMessageReceived(response);
             }
 
